@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Happy Birthday My Fav Person 💖</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400;1,600&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pink-deep: #b81b58;
+      --pink-mid: #e91e63;
+      --pink-soft: #f48fb1;
+      --pink-pale: #fce4ec;
+      --pink-blush: #fff2f6;
+      --white: #ffffff;
+      --shadow-sm: 0 4px 16px rgba(184, 27, 88, 0.08);
+      --shadow-md: 0 8px 30px rgba(184, 27, 88, 0.12);
+      --shadow-lg: 0 16px 45px rgba(184, 27, 88, 0.16);
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--pink-blush);
+      color: #3b202c;
+      overflow-x: hidden;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── MUSIC FLOATING CONTROL ─── */
+    .music-widget {
+      position: fixed;
+      bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+      right: 20px;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(244, 143, 177, 0.4);
+      padding: 7px 14px 7px 8px;
+      border-radius: 40px;
+      box-shadow: var(--shadow-md);
+      transform: translateZ(0);
+      will-change: transform;
+    }
+
+    .music-disc {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f06292, var(--pink-deep));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      box-shadow: 0 2px 8px rgba(233, 30, 99, 0.3);
+      cursor: pointer;
+      border: none;
+      flex-shrink: 0;
+      transition: transform 0.2s ease;
+    }
+
+    .music-disc.playing {
+      animation: rotateDisc 4s linear infinite;
+    }
+
+    @keyframes rotateDisc {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .music-caption {
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .music-caption .m-title {
+      font-size: 0.82em;
+      font-weight: 700;
+      color: var(--pink-deep);
+      line-height: 1.2;
+    }
+
+    .music-caption .m-sub {
+      font-size: 0.7em;
+      color: #8a6272;
+      line-height: 1.1;
+    }
+
+    /* ─── COUNTDOWN OVERLAY ─── */
+    .countdown-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at center, #2e0d20 0%, #15020c 100%);
+      color: #fff;
+      padding: 24px;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      will-change: opacity, transform;
+    }
+
+    .countdown-screen.fade-out {
+      opacity: 0;
+      transform: scale(1.02);
+      pointer-events: none;
+    }
+
+    .cd-sparkles {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .cd-sparkle {
+      position: absolute;
+      background: #f8bbd0;
+      border-radius: 50%;
+      opacity: 0.2;
+    }
+
+    .cd-card {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 520px;
+      width: 100%;
+    }
+
+    .cd-tag {
+      font-size: 0.78em;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: rgba(248, 187, 208, 0.75);
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .cd-heading {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2.6em, 8vw, 4.4em);
+      color: #fce4ec;
+      line-height: 1.15;
+      text-shadow: 0 0 25px rgba(244, 143, 177, 0.6);
+      margin-bottom: 6px;
+    }
+
+    .cd-target-label {
+      font-size: 0.82em;
+      color: rgba(252, 228, 236, 0.65);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 34px;
+    }
+
+    .cd-grid {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .cd-unit-box {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(248, 187, 208, 0.25);
+      border-radius: 16px;
+      padding: 14px 16px;
+      min-width: 78px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .cd-digits {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2em, 7vw, 2.9em);
+      font-weight: 600;
+      color: #ffcdd2;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      display: block;
+    }
+
+    .cd-name {
+      font-size: 0.68em;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.55);
+      margin-top: 5px;
+      display: block;
+    }
+
+    /* Minimalist PIN Styling (Simpel & Tanpa Teks) */
+    .pin-unlock-box {
+      margin-top: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease;
+    }
+
+    .pin-input-field {
+      width: 120px;
+      height: 44px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1.5px solid rgba(248, 187, 208, 0.3);
+      border-radius: 30px;
+      color: #fff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.35em;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: 8px;
+      outline: none;
+      transition: all 0.25s ease;
+      -webkit-appearance: none;
+      appearance: none;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .pin-input-field:focus {
+      border-color: #f48fb1;
+      background: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 0 16px rgba(244, 143, 177, 0.4);
+      transform: scale(1.05);
+    }
+
+    .pin-input-field::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+      letter-spacing: 6px;
+      font-size: 0.95em;
+    }
+
+    .pin-shake {
+      animation: shakeHoriz 0.4s ease-in-out;
+    }
+    .pin-shake .pin-input-field {
+      border-color: #ff5252 !important;
+      background: rgba(255, 82, 82, 0.18) !important;
+    }
+
+    @keyframes shakeHoriz {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+
+    /* CD Done View */
+    .cd-finished {
+      display: none;
+      animation: popScale 0.5s ease forwards;
+    }
+
+    @keyframes popScale {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .cd-finished .party-cake {
+      font-size: 70px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .cd-finished h2 {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2.6em, 8vw, 4em);
+      color: #fce4ec;
+      margin-bottom: 8px;
+    }
+
+    .cd-finished p {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.95em;
+      margin-bottom: 24px;
+    }
+
+    .btn-enter-site {
+      background: linear-gradient(135deg, #f06292, var(--pink-deep));
+      color: #fff;
+      border: none;
+      padding: 13px 34px;
+      border-radius: 40px;
+      font-size: 0.95em;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 8px 24px rgba(233, 30, 99, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-enter-site:active {
+      transform: scale(0.97);
+    }
+
+    /* ─── HERO SECTION ─── */
+    .hero-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 40%, #f48fb1 70%, #ec407a 100%);
+      position: relative;
+      overflow: hidden;
+      padding: 80px 24px 60px;
+    }
+
+    .floating-hearts-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .floating-item {
+      position: absolute;
+      opacity: 0;
+      animation: floatMotion 8s linear infinite;
+      user-select: none;
+    }
+
+    @keyframes floatMotion {
+      0% { opacity: 0; transform: translateY(105vh) scale(0.5); }
+      15% { opacity: 0.6; }
+      85% { opacity: 0.3; }
+      100% { opacity: 0; transform: translateY(-10vh) scale(1.1); }
+    }
+
+    .hero-layout {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1140px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+    }
+
+    .hero-left-text {
+      flex: 1.1;
+      min-width: 280px;
+      color: #fff;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.78em;
+      letter-spacing: 3.5px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 12px;
+      display: inline-block;
+      font-weight: 500;
+    }
+
+    .hero-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(3em, 6.5vw, 5.2em);
+      line-height: 1.1;
+      color: #ffffff;
+      text-shadow: 0 4px 20px rgba(136, 14, 79, 0.25);
+      margin-bottom: 6px;
+    }
+
+    .hero-title span {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.48em;
+      letter-spacing: 1px;
+      color: #fff0f5;
+      margin-top: 4px;
+    }
+
+    .hero-desc {
+      font-size: 0.98em;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 440px;
+      margin-bottom: 30px;
+      line-height: 1.8;
+    }
+
+    .hero-btn-explore {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.25);
+      border: 1.5px solid rgba(255, 255, 255, 0.6);
+      color: #fff;
+      padding: 12px 28px;
+      border-radius: 40px;
+      font-size: 0.92em;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      touch-action: manipulation;
+    }
+
+    .hero-btn-explore:hover, .hero-btn-explore:active {
+      background: #ffffff;
+      color: var(--pink-deep);
+      border-color: #ffffff;
+      box-shadow: 0 8px 24px rgba(233, 30, 99, 0.25);
+    }
+
+    /* Hero Right Photo: Blend with BG */
+    .hero-right-photo {
+      flex: 0 0 350px;
+      height: 450px;
+      position: relative;
+    }
+
+    .photo-blend-wrap {
+      width: 100%;
+      height: 100%;
+      border-radius: 30px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 20px 50px rgba(136, 14, 79, 0.25);
+      background: #f8bbd0;
+    }
+
+    .photo-blend-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Soft Gradient Blend Overlay */
+    .photo-blend-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: 
+        linear-gradient(to right, rgba(244, 143, 177, 0.8) 0%, transparent 35%),
+        linear-gradient(to left, rgba(236, 64, 122, 0.5) 0%, transparent 28%),
+        linear-gradient(to top, rgba(248, 187, 208, 0.85) 0%, transparent 25%),
+        linear-gradient(to bottom, rgba(252, 228, 236, 0.65) 0%, transparent 20%);
+      pointer-events: none;
+    }
+
+    /* ─── POLAROID GALLERY ─── */
+    .gallery-strip-sec {
+      padding: 80px 0 60px;
+      background: var(--pink-blush);
+      position: relative;
+    }
+
+    .section-header {
+      text-align: center;
+      padding: 0 20px;
+      margin-bottom: 36px;
+    }
+
+    .section-header h2 {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2.4em, 6vw, 3.6em);
+      color: var(--pink-deep);
+      line-height: 1.2;
+    }
+
+    .section-header p {
+      font-size: 0.85em;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #9c4d6f;
+      margin-top: 4px;
+    }
+
+    /* Horizontal scroll container */
+    .polaroids-scroll-track {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      padding: 24px 30px 40px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .polaroids-scroll-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Clean Polaroid without text */
+    .polaroid-card {
+      flex: 0 0 215px;
+      background: #ffffff;
+      border-radius: 6px;
+      padding: 10px 10px 36px 10px;
+      box-shadow: 0 8px 24px rgba(184, 27, 88, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
+      transform: rotate(var(--rot, 0deg));
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      cursor: pointer;
+      scroll-snap-align: center;
+      touch-action: manipulation;
+    }
+
+    .polaroid-card:hover, .polaroid-card:active {
+      transform: rotate(0deg) scale(1.03) translateY(-6px);
+      box-shadow: 0 16px 36px rgba(184, 27, 88, 0.2);
+      z-index: 3;
+    }
+
+    .polaroid-photo-box {
+      width: 100%;
+      aspect-ratio: 1 / 1.05;
+      overflow: hidden;
+      border-radius: 3px;
+      background: #fdf0f4;
+    }
+
+    .polaroid-photo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.35s ease;
+    }
+
+    .polaroid-card:hover .polaroid-photo-box img {
+      transform: scale(1.06);
+    }
+
+    /* ─── VIDEO SECTION ─── */
+    .videos-section {
+      padding: 70px 24px;
+      background: linear-gradient(180deg, var(--pink-blush) 0%, var(--pink-pale) 100%);
+      text-align: center;
+    }
+
+    .videos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 320px));
+      gap: 24px;
+      justify-content: center;
+      max-width: 740px;
+      margin: 0 auto;
+    }
+
+    .video-tile {
+      background: #000;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      aspect-ratio: 9 / 16;
+      max-height: 520px;
+    }
+
+    .video-tile video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ─── MESSAGE & WISHES ─── */
+    .wishes-section {
+      padding: 80px 24px 100px;
+      display: flex;
+      justify-content: center;
+      background: linear-gradient(180deg, var(--pink-pale) 0%, #ffffff 100%);
+    }
+
+    .wishes-card {
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(244, 143, 177, 0.4);
+      border-radius: 28px;
+      padding: 46px 36px;
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .wishes-card .emoji-cake {
+      font-size: 64px;
+      margin-bottom: 16px;
+      display: inline-block;
+      animation: gentleBounce 2.5s infinite;
+    }
+
+    @keyframes gentleBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .wishes-card h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2em, 5vw, 2.6em);
+      color: var(--pink-deep);
+      margin-bottom: 18px;
+      font-weight: 600;
+    }
+
+    .wishes-card p {
+      color: #522d3e;
+      font-size: 1.02em;
+      line-height: 1.95;
+      margin-bottom: 16px;
+      letter-spacing: 0.2px;
+    }
+
+    .wishes-card .wishes-highlight {
+      display: inline-block;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.18em;
+      font-weight: 600;
+      color: var(--pink-deep);
+      margin-top: 4px;
+      line-height: 1.6;
+    }
+
+    .btn-open-gift {
+      margin-top: 20px;
+      background: linear-gradient(135deg, #f06292, var(--pink-deep));
+      color: #fff;
+      border: none;
+      padding: 13px 34px;
+      border-radius: 40px;
+      font-size: 0.96em;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 8px 24px rgba(233, 30, 99, 0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+      touch-action: manipulation;
+    }
+
+    .btn-open-gift:active {
+      transform: scale(0.97);
+    }
+
+    .hidden-surprise {
+      display: none;
+      margin-top: 24px;
+      padding: 22px;
+      background: #fce4ec;
+      border-radius: 16px;
+      border: 1px dashed #f48fb1;
+      animation: popScale 0.4s ease forwards;
+    }
+
+    .hidden-surprise p {
+      color: var(--pink-deep);
+      font-weight: 600;
+      margin: 0;
+      font-size: 1em;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #f8bbd0;
+      padding: 28px 20px calc(28px + env(safe-area-inset-bottom, 0px));
+      text-align: center;
+      color: #fff;
+    }
+
+    footer p {
+      font-size: 0.85em;
+      color: rgba(255, 255, 255, 0.95);
+      letter-spacing: 0.5px;
+    }
+
+    /* ─── LIGHTBOX MODAL ─── */
+    .lightbox-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 2, 9, 0.92);
+      z-index: 99999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      touch-action: manipulation;
+    }
+
+    .lightbox-modal.is-active {
+      display: flex;
+    }
+
+    .lightbox-modal img {
+      max-width: 92%;
+      max-height: 85vh;
+      border-radius: 12px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+      object-fit: contain;
+    }
+
+    .lb-close-btn {
+      position: absolute;
+      top: 16px;
+      right: 22px;
+      color: #fff;
+      font-size: 34px;
+      cursor: pointer;
+      padding: 8px;
+      line-height: 1;
+    }
+
+    /* ─── RESPONSIVE BREAKPOINTS (iPhone, Android, Laptop) ─── */
+    @media (max-width: 860px) {
+      .hero-layout {
+        flex-direction: column;
+        text-align: center;
+        gap: 32px;
+      }
+
+      .hero-desc {
+        margin: 0 auto 28px;
+      }
+
+      .hero-right-photo {
+        flex: 0 0 auto;
+        width: min(300px, 80vw);
+        height: 380px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-container {
+        padding-top: 60px;
+      }
+
+      .hero-title {
+        font-size: 3.2em;
+      }
+
+      .hero-right-photo {
+        width: 250px;
+        height: 320px;
+      }
+
+      .polaroid-card {
+        flex: 0 0 185px;
+        padding-bottom: 30px;
+      }
+
+      .wishes-card {
+        padding: 34px 20px;
+      }
+
+      .cd-unit-box {
+        min-width: 66px;
+        padding: 10px 8px;
+      }
+
+      .cd-digits {
+        font-size: 2.2em;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Music Player Control -->
+  <aside class="music-widget" id="musicWidget">
+    <button class="music-disc" id="musicToggleBtn" aria-label="Play / Pause Musik">▶</button>
+    <div class="music-caption" id="musicCaption">
+      <span class="m-title">Soft</span>
+      <span class="m-sub">LANY 🎵</span>
+    </div>
+  </aside>
+
+  <audio id="audioElement" loop preload="auto">
+    <source src="lany-soft.mp3" type="audio/mpeg">
+    <source src="LANY - Soft (Official Lyric Video).mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Countdown Overlay Screen -->
+  <div class="countdown-screen" id="countdownOverlay">
+    <div class="cd-sparkles" id="sparklesBox"></div>
+
+    <div class="cd-card" id="cdCardRunning">
+      <span class="cd-tag">✦ Countdown Menuju Hari Spesial ✦</span>
+      <h1 class="cd-heading">Menuju Hari Bahagiamu</h1>
+      <p class="cd-target-label">18 September 2026 · Pukul 00.00 WIB</p>
+
+      <div class="cd-grid">
+        <div class="cd-unit-box">
+          <span class="cd-digits" id="cdHours">00</span>
+          <span class="cd-name">Jam</span>
+        </div>
+        <div class="cd-unit-box">
+          <span class="cd-digits" id="cdMinutes">00</span>
+          <span class="cd-name">Menit</span>
+        </div>
+        <div class="cd-unit-box">
+          <span class="cd-digits" id="cdSeconds">00</span>
+          <span class="cd-name">Detik</span>
+        </div>
+      </div>
+
+      <!-- Minimalist PIN Unlock (Simpel & Tanpa Teks) -->
+      <div class="pin-unlock-box" id="pinUnlockBox">
+        <input type="password" id="secretPinInput" class="pin-input-field" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="••••" autocomplete="off" aria-label="PIN" />
+      </div>
+    </div>
+
+    <!-- Tampilan saat tepat 00:00 -->
+    <div class="cd-finished" id="cdCardDone">
+      <span class="party-cake">🎂</span>
+      <h2>Happy Birthday!</h2>
+      <p>Waktunya tiba! Hari spesialmu dimulai sekarang 💖</p>
+      <button class="btn-enter-site" id="btnEnterCelebration">Buka Kejutan 🌸</button>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <main>
+    <section class="hero-container" id="home">
+      <div class="floating-hearts-layer" id="heartsLayer"></div>
+
+      <div class="hero-layout">
+        <!-- Left text -->
+        <div class="hero-left-text">
+          <span class="hero-eyebrow">✦ Hari Spesialmu ✦</span>
+          <h1 class="hero-title">
+            Happy Birthday
+            <span>My Fav Person 💖</span>
+          </h1>
+          <p class="hero-desc">
+            Hari ini adalah hari yang paling istimewa.<br>
+            Semoga setiap langkahmu dipenuhi dengan kebahagiaan,
+            cinta yang tulus, dan segala hal indah di dunia. 🌸
+          </p>
+          <a href="#gallery" class="hero-btn-explore">Lihat Momen Kita 📸</a>
+        </div>
+
+        <!-- Right Photo blended with background -->
+        <div class="hero-right-photo">
+          <div class="photo-blend-wrap">
+            <img src="terbaru.jpeg" alt="My Fav Person" id="mainHeroImg" loading="eager" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Polaroid Gallery Section (Clean Without Text) -->
+    <section class="gallery-strip-sec" id="gallery">
+      <div class="section-header">
+        <h2>Moments 🎞️</h2>
+        <p>✦ kenangan manis yang tak terlupakan ✦</p>
+      </div>
+
+      <div class="polaroids-scroll-track">
+        <div class="polaroid-card" style="--rot:-2.5deg" onclick="showLightbox('foto.jpg')">
+          <div class="polaroid-photo-box">
+            <img src="foto.jpg" alt="Memory" loading="lazy" />
+          </div>
+        </div>
+
+        <div class="polaroid-card" style="--rot:-2deg" onclick="showLightbox('WhatsApp Image 2026-09-17 at 22.47.35.jpeg')">
+          <div class="polaroid-photo-box">
+            <img src="WhatsApp Image 2026-09-17 at 22.47.35.jpeg" alt="Memory" loading="lazy" />
+          </div>
+        </div>
+
+        <div class="polaroid-card" style="--rot:3deg" onclick="showLightbox('WhatsApp Image 2026-09-17 at 22.47.36.jpeg')">
+          <div class="polaroid-photo-box">
+            <img src="WhatsApp Image 2026-09-17 at 22.47.36.jpeg" alt="Memory" loading="lazy" />
+          </div>
+        </div>
+
+        <div class="polaroid-card" style="--rot:-1.5deg" onclick="showLightbox('WhatsApp Image 2026-09-17 at 22.49.02.jpeg')">
+          <div class="polaroid-photo-box">
+            <img src="WhatsApp Image 2026-09-17 at 22.49.02.jpeg" alt="Memory" loading="lazy" />
+          </div>
+        </div>
+
+        <div class="polaroid-card" style="--rot:2.5deg" onclick="showLightbox('WhatsApp Image 2026-09-17 at 23.06.34.jpeg')">
+          <div class="polaroid-photo-box">
+            <img src="WhatsApp Image 2026-09-17 at 23.06.34.jpeg" alt="Memory" loading="lazy" />
+          </div>
+        </div>
+
+        <div class="polaroid-card" style="--rot:-3deg" onclick="showLightbox('WhatsApp Image 2026-09-17 at 23.06.36.jpeg')">
+          <div class="polaroid-photo-box">
+            <img src="WhatsApp Image 2026-09-17 at 23.06.36.jpeg" alt="Memory" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Video Section -->
+    <section class="videos-section">
+      <div class="section-header">
+        <h2>Video Kita 🎬</h2>
+        <p>✦ rekaman momen bahagia ✦</p>
+      </div>
+
+      <div class="videos-container">
+        <div class="video-tile">
+          <video controls playsinline webkit-playsinline preload="metadata">
+            <source src="WhatsApp Video 2026-09-17 at 22.49.02.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="video-tile">
+          <video controls playsinline webkit-playsinline preload="metadata">
+            <source src="WhatsApp Video 2026-09-17 at 23.06.36.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </section>
+
+    <!-- Wishes Card Section -->
+    <section class="wishes-section">
+      <div class="wishes-card">
+        <span class="emoji-cake">🎂</span>
+        <h2>Happy Birthday! 🎉</h2>
+        <p>
+          Semoga hal-hal baik selalu beriringan denganmu, semoga semesta senantiasa berpihak padamu, dan semoga jalanmu untuk mencapai masa depan yang cerah selalu dipermudah.
+        </p>
+        <p>
+          Teruslah tumbuh, teruslah melangkah, dan berbahagia. Aku akan selalu bangga atas setiap proses yang sudah kamu lalui.
+        </p>
+        <p>
+          <span class="wishes-highlight">“Terimakasih sudah bertahan sejauh ini.” 🌸✨</span>
+        </p>
+
+        <button class="btn-open-gift" id="btnGift">Buka Kado Spesial 🎁</button>
+
+        <div class="hidden-surprise" id="surpriseBox">
+          <p>kado nya nyusul hehe. ✌️😂<br>
+          <span style="display:block; margin-top:8px; font-weight:500; color:#880e4f;">
+            Happy birth day, serta mulia 
+          </span></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>💖 Made with love, just for you 💕</p>
+  </footer>
+
+  <!-- Lightbox Modal -->
+  <div class="lightbox-modal" id="lightboxModal" onclick="hideLightbox()">
+    <span class="lb-close-btn">&times;</span>
+    <img src="" id="lightboxImageTarget" alt="Enlarged preview" onclick="event.stopPropagation()" />
+  </div>
+
+  <!-- Confetti library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    // ─── AUDIO CONTROLLER (iOS / Android Friendly) ───
+    const audio = document.getElementById('audioElement');
+    const musicBtn = document.getElementById('musicToggleBtn');
+    const musicCaption = document.getElementById('musicCaption');
+    let isPlaying = false;
+
+    function playAudioSafe() {
+      audio.play().then(() => {
+        isPlaying = true;
+        musicBtn.textContent = '⏸';
+        musicBtn.classList.add('playing');
+      }).catch(err => {
+        console.log("Audio autoplay dicekal browser:", err);
+      });
+    }
+
+    function toggleMusic() {
+      if (isPlaying) {
+        audio.pause();
+        musicBtn.textContent = '▶';
+        musicBtn.classList.remove('playing');
+        isPlaying = false;
+      } else {
+        playAudioSafe();
+      }
+    }
+
+    musicBtn.addEventListener('click', toggleMusic);
+    musicCaption.addEventListener('click', toggleMusic);
+
+    // ─── COUNTDOWN TIMER (Akurat ke 18 Sep 2026, 00:00 WIB) ───
+    const targetDate = new Date(2026, 8, 18, 0, 0, 0); // Bulan September (index 8)
+    const cdCardRunning = document.getElementById('cdCardRunning');
+    const cdCardDone = document.getElementById('cdCardDone');
+    const cdOverlay = document.getElementById('countdownOverlay');
+    const elH = document.getElementById('cdHours');
+    const elM = document.getElementById('cdMinutes');
+    const elS = document.getElementById('cdSeconds');
+
+    function updateTimer() {
+      const now = new Date();
+      const diff = targetDate - now;
+
+      if (diff <= 0) {
+        cdCardRunning.style.display = 'none';
+        cdCardDone.style.display = 'block';
+        confetti({ particleCount: 100, spread: 80, origin: { y: 0.5 } });
+        clearInterval(timerInterval);
+        return;
+      }
+
+      const totalSec = Math.floor(diff / 1000);
+      const hrs = Math.floor(totalSec / 3600);
+      const mins = Math.floor((totalSec % 3600) / 60);
+      const secs = totalSec % 60;
+
+      elH.textContent = String(hrs).padStart(2, '0');
+      elM.textContent = String(mins).padStart(2, '0');
+      elS.textContent = String(secs).padStart(2, '0');
+    }
+
+    updateTimer();
+    const timerInterval = setInterval(updateTimer, 1000);
+
+    // Buka tampilan utama & trigger musik
+    function enterMainCelebration() {
+      cdOverlay.classList.add('fade-out');
+      setTimeout(() => {
+        cdOverlay.style.display = 'none';
+      }, 600);
+
+      // Trigger musik melalui user gesture langsung
+      playAudioSafe();
+
+      // Confetti burst
+      confetti({
+        particleCount: 120,
+        spread: 80,
+        origin: { y: 0.6 },
+        colors: ['#e91e63', '#f06292', '#f8bbd0', '#ff80ab', '#ffffff']
+      });
+    }
+
+    // ─── MINIMALIST PIN UNLOCK (PIN: 0918) ───
+    const pinInput = document.getElementById('secretPinInput');
+    const pinBox = document.getElementById('pinUnlockBox');
+
+    function verifySecretPin() {
+      const entered = (pinInput.value || '').trim();
+      if (entered === '0918') {
+        pinInput.style.borderColor = '#81c784';
+        pinInput.style.background = 'rgba(129, 199, 132, 0.25)';
+        pinBox.classList.remove('pin-shake');
+        playAudioSafe(); // Panggil langsung di user gesture agar diizinkan iOS Safari & Android!
+        setTimeout(() => {
+          enterMainCelebration();
+        }, 250);
+      } else {
+        pinBox.classList.remove('pin-shake');
+        void pinBox.offsetWidth; // trigger animation reflow
+        pinBox.classList.add('pin-shake');
+        pinInput.value = '';
+        pinInput.focus();
+      }
+    }
+
+    pinInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        verifySecretPin();
+      }
+    });
+
+    pinInput.addEventListener('input', () => {
+      if (pinInput.value.length === 4) {
+        verifySecretPin();
+      }
+    });
+
+    document.getElementById('btnEnterCelebration').addEventListener('click', enterMainCelebration);
+
+    // ─── BACKGROUND SPARKLES (Efisiensi tinggi, tidak membebani GPU) ───
+    const sparklesBox = document.getElementById('sparklesBox');
+    const fragment = document.createDocumentFragment();
+    for (let i = 0; i < 30; i++) {
+      const sp = document.createElement('div');
+      sp.className = 'cd-sparkle';
+      const size = Math.random() * 2.5 + 1.5;
+      sp.style.width = size + 'px';
+      sp.style.height = size + 'px';
+      sp.style.left = Math.random() * 100 + '%';
+      sp.style.top = Math.random() * 100 + '%';
+      fragment.appendChild(sp);
+    }
+    sparklesBox.appendChild(fragment);
+
+    // ─── FLOATING HEARTS (Dibatasi agar lancar di iPhone & Android) ───
+    const heartsLayer = document.getElementById('heartsLayer');
+    const heartEmojis = ['💖', '💕', '🌸', '✨', '🩷', '🎀'];
+
+    function dropHeart() {
+      if (document.hidden) return; // Hemat baterai saat tab tidak aktif
+      if (heartsLayer.childElementCount > 10) return; // Batasi maksimal 10 elemen di layar
+
+      const heart = document.createElement('span');
+      heart.className = 'floating-item';
+      heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+      heart.style.left = (Math.random() * 92 + 4) + '%';
+      heart.style.fontSize = (Math.random() * 12 + 14) + 'px';
+      heart.style.animationDuration = (Math.random() * 3 + 6) + 's';
+      heartsLayer.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 9000);
+    }
+
+    setInterval(dropHeart, 1200);
+
+    // ─── SURPRISE / GIFT BUTTON ───
+    document.getElementById('btnGift').addEventListener('click', function() {
+      this.style.display = 'none';
+      document.getElementById('surpriseBox').style.display = 'block';
+
+      confetti({
+        particleCount: 80,
+        spread: 70,
+        origin: { y: 0.7 },
+        colors: ['#e91e63', '#f06292', '#f8bbd0', '#ff80ab', '#ffffff']
+      });
+    });
+
+    // ─── LIGHTBOX PREVIEW ───
+    const lightboxModal = document.getElementById('lightboxModal');
+    const lightboxImg = document.getElementById('lightboxImageTarget');
+
+    function showLightbox(src) {
+      lightboxImg.src = src;
+      lightboxModal.classList.add('is-active');
+    }
+
+    function hideLightbox() {
+      lightboxModal.classList.remove('is-active');
+    }
+
+    // Fallback hero image jika gagal muat
+    document.getElementById('mainHeroImg').onerror = function() {
+      this.src = 'foto.jpg';
+    };
+  </script>
+</body>
+</html>
